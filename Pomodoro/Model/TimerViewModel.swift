@@ -8,6 +8,7 @@
 import Foundation
 import CoreData
 import Combine
+import UserNotifications
 
 class TimerViewModel: ObservableObject {
     @Published var timerSubscription: Cancellable?
@@ -18,6 +19,7 @@ class TimerViewModel: ObservableObject {
     @Published var sessionCount: Int = 0
     
     private let context: NSManagedObjectContext
+    private let notificationService: NotificationService = NotificationService()
 
     init(context: NSManagedObjectContext) {
         self.context = context
@@ -35,7 +37,7 @@ class TimerViewModel: ObservableObject {
         request.predicate = NSPredicate(format: "date >= %@ AND date < %@", startOfDay as NSDate, endOfDay as NSDate)
         
         do {
-            let sessions: [Session] = try context.fetch(request)
+            let sessions = try context.fetch(request)
             sessionCount = sessions.count
         } catch {
             print("Error fetching todos: \(error)")
@@ -55,7 +57,8 @@ class TimerViewModel: ObservableObject {
                     newSession.duration = Int16(self.inputMinutes) ?? 30
                     
                     self.saveContext()
-
+                    self.notificationService.sendNotification()
+                    
                     self.timerSubscription?.cancel()
                     self.isRunning = false
                     self.isPaused = false

@@ -13,9 +13,8 @@ struct PomodoroApp: App {
     @StateObject private var dataController = DataController()
     
     var body: some Scene {
-        WindowGroup {
-            ContentView(timerViewModel: TimerViewModel(context: dataController.container.viewContext))
-                .environment(\.managedObjectContext, dataController.container.viewContext)
+        Settings {
+            EmptyView()
         }
     }
 }
