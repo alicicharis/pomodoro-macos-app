@@ -12,7 +12,7 @@ struct PomodoroApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(timerViewModel: TimerViewModel())
         }
     }
 }
@@ -34,7 +34,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         self.popover = NSPopover()
         self.popover.contentSize = NSSize(width: 300, height: 300)
         self.popover.behavior = .transient
-        self.popover.contentViewController = NSHostingController(rootView: ContentView())
+        self.popover.contentViewController = NSHostingController(rootView: ContentView(timerViewModel: TimerViewModel()))
     }
     
     @objc func togglePopover() {
