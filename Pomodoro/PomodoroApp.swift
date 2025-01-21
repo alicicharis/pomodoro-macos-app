@@ -10,9 +10,12 @@ import SwiftUI
 @main
 struct PomodoroApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+    @StateObject private var dataController = DataController()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView(timerViewModel: TimerViewModel())
+            ContentView(timerViewModel: TimerViewModel(context: dataController.container.viewContext))
+                .environment(\.managedObjectContext, dataController.container.viewContext)
         }
     }
 }
@@ -34,7 +37,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         self.popover = NSPopover()
         self.popover.contentSize = NSSize(width: 300, height: 300)
         self.popover.behavior = .transient
-        self.popover.contentViewController = NSHostingController(rootView: ContentView(timerViewModel: TimerViewModel()))
+        self.popover.contentViewController = NSHostingController(rootView: ContentView(timerViewModel: TimerViewModel(context: DataController.shared.viewContext)))
     }
     
     @objc func togglePopover() {
@@ -48,5 +51,4 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         }
         
     }
-    
 }

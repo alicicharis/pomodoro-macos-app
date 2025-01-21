@@ -35,6 +35,10 @@ struct ContentView: View {
                     ButtonView(buttonText: "Cancel", buttonColor: Color.red, disabled: false, buttonAction: timerViewModel.cancelCountdown)
                 }
             }
+            Spacer()
+            Text("Sessions: \(timerViewModel.sessionCount)")
+                .font(.system(size: 18, weight: .regular, design: .default))
+            Spacer()
         }
         .padding()
         .frame(width: 300, height: 300)
@@ -42,6 +46,6 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView(timerViewModel: TimerViewModel())
+    ContentView(timerViewModel: TimerViewModel(context: DataController.shared.viewContext))
         .frame(width: 300, height: 300)
 }
