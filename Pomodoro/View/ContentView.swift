@@ -9,7 +9,14 @@ import SwiftUI
 import Combine
 
 struct ContentView: View {
-    @ObservedObject var timerViewModel: TimerViewModel
+    @Environment(\.managedObjectContext) private var context
+    @StateObject private var timerViewModel: TimerViewModel
+        
+    init() {
+        // Create the TimerViewModel with a temporary context
+        let tempContext = CoreDataStack.shared.persistentContainer.viewContext
+        _timerViewModel = StateObject(wrappedValue: TimerViewModel(context: tempContext))
+    }
     
     var body: some View {
         VStack {
@@ -45,7 +52,7 @@ struct ContentView: View {
     }
 }
 
-#Preview {
-    ContentView(timerViewModel: TimerViewModel(context: DataController.shared.viewContext))
-        .frame(width: 300, height: 300)
-}
+//#Preview {
+//    ContentView(timerViewModel: TimerViewModel(context: DataController.shared.viewContext))
+//        .frame(width: 300, height: 300)
+//}

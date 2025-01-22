@@ -9,6 +9,7 @@ import Foundation
 import CoreData
 import Combine
 import UserNotifications
+import SwiftUICore
 
 class TimerViewModel: ObservableObject {
     @Published var timerSubscription: Cancellable?
@@ -18,9 +19,9 @@ class TimerViewModel: ObservableObject {
     @Published var isPaused: Bool = false
     @Published var sessionCount: Int = 0
     
-    private let context: NSManagedObjectContext
+    private var context: NSManagedObjectContext
     private let notificationService: NotificationService = NotificationService()
-
+    
     init(context: NSManagedObjectContext) {
         self.context = context
         getSessionCount()
